@@ -69,8 +69,8 @@ export default function SidebarNav() {
 
       <SidebarNavItem icon={faChartPie} href="#">Charts</SidebarNavItem>
 
-      <SidebarNavGroup toggleIcon={faFileLines} toggleText="Forms">
-        <SidebarNavItem href="#">Form Control</SidebarNavItem>
+      <SidebarNavGroup toggleIcon={faFileLines} toggleText="Queue">
+        <SidebarNavItem href="/queue/control">Queue Control</SidebarNavItem>
         <SidebarNavItem href="#">Select</SidebarNavItem>
         <SidebarNavItem href="#">Checks and radios</SidebarNavItem>
         <SidebarNavItem href="#">Range</SidebarNavItem>

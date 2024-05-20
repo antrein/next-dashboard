@@ -601,7 +601,7 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <div className="mb-3">
+                  {/* <div className="mb-3">
                     <div className="d-flex mb-1">
                       <div>
                         <FontAwesomeIcon
@@ -619,7 +619,7 @@ export default function Page() {
                       variant="success"
                       now={56}
                     />
-                  </div>
+                  </div> */}
                   {/* 
                   <div className="mb-3">
                     <div className="d-flex mb-1">
