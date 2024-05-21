@@ -5,7 +5,7 @@ import HeaderFeaturedNav from '@/app/ui/dashboard/Header/HeaderFeaturedNav'
 import HeaderNotificationNav from '@/app/ui/dashboard/Header/HeaderNotificationNav'
 import HeaderProfileNav from '@/app/ui/dashboard/Header/HeaderProfileNav'
 import Breadcrumb from '@/app/ui/dashboard/Breadcrumb/Breadcrumb'
-import HeaderSelectProjectNav from './HeadeSelectProjectNav'
+import HeaderSelectProjectNav from './HeaderSelectProjectNav'
 
 export default function Header() {
   return (
