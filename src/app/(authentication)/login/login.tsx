@@ -1,17 +1,24 @@
-'use client'
+'use client';
 
 import {
-  Alert, Button, Col, Form, FormControl, InputGroup, Row,
+  Alert,
+  Button,
+  Col,
+  Form,
+  FormControl,
+  InputGroup,
+  Row,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { deleteCookie, getCookie } from 'cookies-next';
 import axios from 'axios';
 import Link from 'next/link';
 import InputGroupText from 'react-bootstrap/InputGroupText';
+import Cookies from 'js-cookie';
 
 export default function Login() {
   const router = useRouter();
@@ -26,25 +33,23 @@ export default function Login() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const getRedirect = () => {
-    const redirect = getCookie('redirect');
-    if (redirect) {
-      deleteCookie('redirect');
-      return redirect.toString();
-    }
-    return '/';
-  };
-
   const login = async (e: SyntheticEvent) => {
     e.stopPropagation();
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const res = await axios.post('https://api.antrein.com/bc/dashboard/auth/login', formData);
+      const res = await axios.post(
+        'https://api.antrein.com/bc/dashboard/auth/login',
+        formData
+      );
       if (res.status === 200) {
-        router.push(getRedirect());
+        const data = res.data.data;
+        if (data) {
+          const { token, tenant } = data;
+          Cookies.set('auth', JSON.stringify({ token, tenant }));
+          router.push('/');
+        }
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -58,7 +63,7 @@ export default function Login() {
   return (
     <>
       <Alert
-        variant="danger"
+        variant='danger'
         show={error !== ''}
         onClose={() => setError('')}
         dismissible
@@ -66,44 +71,44 @@ export default function Login() {
         {error}
       </Alert>
       <Form onSubmit={login}>
-        <InputGroup className="mb-3">
+        <InputGroup className='mb-3'>
           <InputGroupText>
             <FontAwesomeIcon icon={faUser} fixedWidth />
           </InputGroupText>
           <FormControl
-            type="email"
-            name="email"
+            type='email'
+            name='email'
             required
             disabled={submitting}
-            placeholder="Email"
-            aria-label="Email"
+            placeholder='Email'
+            aria-label='Email'
             value={formData.email}
             onChange={handleChange}
           />
         </InputGroup>
 
-        <InputGroup className="mb-3">
+        <InputGroup className='mb-3'>
           <InputGroupText>
             <FontAwesomeIcon icon={faLock} fixedWidth />
           </InputGroupText>
           <FormControl
-            type="password"
-            name="password"
+            type='password'
+            name='password'
             required
             disabled={submitting}
-            placeholder="Password"
-            aria-label="Password"
+            placeholder='Password'
+            aria-label='Password'
             value={formData.password}
             onChange={handleChange}
           />
         </InputGroup>
 
-        <Row className="align-items-center">
+        <Row className='align-items-center'>
           <Col xs={6}>
             <Button
-              className="px-4"
-              variant="primary"
-              type="submit"
+              className='px-4'
+              variant='primary'
+              type='submit'
               disabled={submitting}
             >
               Login
