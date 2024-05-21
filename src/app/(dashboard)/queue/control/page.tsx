@@ -104,7 +104,7 @@ export default function Page() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({...formData, threshold: Number(formData.threshold), max_users_in_queue: Number(formData.max_users_in_queue), queue_start: formatDate(formData.queue_start), queue_end: formatDate(formData.queue_end)})
+          body: JSON.stringify({...formData,session_time: Number(formData.session_time), threshold: Number(formData.threshold), max_users_in_queue: Number(formData.max_users_in_queue), queue_start: formatDate(formData.queue_start), queue_end: formatDate(formData.queue_end)})
         });
   
         if (!response.ok) {
