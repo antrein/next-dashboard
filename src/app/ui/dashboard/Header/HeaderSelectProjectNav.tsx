@@ -1,25 +1,71 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Nav, NavItem, NavLink, Modal, Button, ListGroup, ListGroupItem } from "react-bootstrap";
 import { useRouter } from 'next/navigation';
 import styles from "./HeaderSelectProjectNav.module.css"; // Import the custom CSS
+import Cookies from "js-cookie";
+
 
 export default function HeaderSelectProjectNav() {
   const [showModal, setShowModal] = useState(false);
-  const [projects, setProjects] = useState([
-    { name: "project 1", id: "project-1" },
-    { name: "project 2", id: "project-2" }
-  ]);
+  const [projects, setProjects] = useState([]);
+  const [selectedProjectName, setSelectedProjectName] = useState("Select Project");
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
   const router = useRouter();
 
-  const handleShow = () => setShowModal(true);
+  // useEffect(() => {
+    // Function to fetch projects from API
+    const fetchProjects = async () => {
+      try {
+        const auth = Cookies.get("auth");
+        if (!auth) {
+          return;
+        }
+        const authParsed = JSON.parse(auth);
+        const { token } = authParsed;
+        const response = await fetch(
+          'https://api.antrein.com/bc/dashboard/project/list',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setProjects(data.data.projects); // Assuming the API response structure
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    };
+
+  //   fetchProjects();
+  // }, []);
+
+  const handleShow = () => {
+    fetchProjects();
+    setShowModal(true);
+  };
+
   const handleClose = () => setShowModal(false);
   const handleNewProject = () => {
     setShowModal(false);
     router.push('/queue/create');
   };
+
+  const handleProjectSelect = (projectName, projectId) => {
+    setSelectedProjectName(projectName);
+    setSelectedProjectId(projectId);
+    setShowModal(false);
+  };
+
 
   return (
     <>
@@ -30,7 +76,7 @@ export default function HeaderSelectProjectNav() {
             onClick={handleShow}
             style={{ cursor: "pointer" }}
           >
-            Select Project <FontAwesomeIcon icon={faCaretDown} />
+            {selectedProjectName} <FontAwesomeIcon icon={faCaretDown} />
           </NavLink>
         </NavItem>
       </Nav>
@@ -39,17 +85,27 @@ export default function HeaderSelectProjectNav() {
         show={showModal}
         onHide={handleClose}
         dialogClassName={styles.modalCentered} // Apply the custom class
-        centered // Use Bootstrap's centered property
+        centered
       >
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Select Project</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ListGroup>
             {projects.map((project, index) => (
-              <ListGroupItem key={index}>
+              <ListGroupItem 
+                key={index}
+                onClick={() => handleProjectSelect(project.name, project.id)}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="d-flex justify-content-between align-items-center">
-                  <span>{project.name}</span>
+                  <div className="d-flex align-items-center">
+                    {selectedProjectId === project.id && (
+                      <FontAwesomeIcon icon={faCheck} className="me-2" />
+                    )}
+                    <span>{project.name}</span>
+                  </div>
+
                   <span>{project.id}</span>
                 </div>
               </ListGroupItem>
@@ -58,7 +114,7 @@ export default function HeaderSelectProjectNav() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            CANCEL
           </Button>
           <Button variant="primary" onClick={handleNewProject}>
             New Project
