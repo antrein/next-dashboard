@@ -1,50 +1,60 @@
-'use client'
+"use client";
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { Nav, NavItem, NavLink, Modal, Button, ListGroup, ListGroupItem } from "react-bootstrap";
-import { useRouter } from 'next/navigation';
+import {
+  Nav,
+  NavItem,
+  NavLink,
+  Modal,
+  Button,
+  ListGroup,
+  ListGroupItem,
+} from "react-bootstrap";
+import { useRouter } from "next/navigation";
 import styles from "./HeaderSelectProjectNav.module.css"; // Import the custom CSS
 import Cookies from "js-cookie";
-
 
 export default function HeaderSelectProjectNav() {
   const [showModal, setShowModal] = useState(false);
   const [projects, setProjects] = useState([]);
-  const [selectedProjectName, setSelectedProjectName] = useState("Select Project");
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [selectedProjectName, setSelectedProjectName] =
+    useState("Select Project");
+  const [selectedProjectId, setSelectedProjectId] = useState(
+    Cookies.get("project")
+  );
   const router = useRouter();
 
   // useEffect(() => {
-    // Function to fetch projects from API
-    const fetchProjects = async () => {
-      try {
-        const auth = Cookies.get("auth");
-        if (!auth) {
-          return;
-        }
-        const authParsed = JSON.parse(auth);
-        const { token } = authParsed;
-        const response = await fetch(
-          'https://api.antrein.com/bc/dashboard/project/list',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log(response);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setProjects(data.data.projects); // Assuming the API response structure
-      } catch (error) {
-        console.error('Error fetching projects:', error);
+  // Function to fetch projects from API
+  const fetchProjects = async () => {
+    try {
+      const auth = Cookies.get("auth");
+      if (!auth) {
+        return;
       }
-    };
+      const authParsed = JSON.parse(auth);
+      const { token } = authParsed;
+      const response = await fetch(
+        "https://api.antrein.com/bc/dashboard/project/list",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setProjects(data.data.projects); // Assuming the API response structure
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
+  };
 
   //   fetchProjects();
   // }, []);
@@ -57,15 +67,15 @@ export default function HeaderSelectProjectNav() {
   const handleClose = () => setShowModal(false);
   const handleNewProject = () => {
     setShowModal(false);
-    router.push('/queue/create');
+    router.push("/queue/create");
   };
 
-  const handleProjectSelect = (projectName, projectId) => {
-    setSelectedProjectName(projectName);
+  const handleProjectSelect = (projectName: string, projectId: string) => {
     setSelectedProjectId(projectId);
+    setSelectedProjectName(projectName);
+    Cookies.set("project", projectId);
     setShowModal(false);
   };
-
 
   return (
     <>
@@ -92,8 +102,8 @@ export default function HeaderSelectProjectNav() {
         </Modal.Header>
         <Modal.Body>
           <ListGroup>
-            {projects.map((project, index) => (
-              <ListGroupItem 
+            {projects.map((project: any, index) => (
+              <ListGroupItem
                 key={index}
                 onClick={() => handleProjectSelect(project.name, project.id)}
                 style={{ cursor: "pointer" }}
@@ -124,6 +134,3 @@ export default function HeaderSelectProjectNav() {
     </>
   );
 }
-
-
-  
