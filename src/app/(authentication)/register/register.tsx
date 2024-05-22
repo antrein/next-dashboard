@@ -1,8 +1,6 @@
-'use client'
+'use client';
 
-import {
-  Alert, Button, Form, FormControl, InputGroup,
-} from 'react-bootstrap';
+import { Alert, Button, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { SyntheticEvent, useState } from 'react';
 import axios from 'axios';
 import InputGroupText from 'react-bootstrap/InputGroupText';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Register() {
   const router = useRouter();
@@ -19,7 +18,7 @@ export default function Register() {
     email: '',
     name: '',
     password: '',
-    retype_password: ''
+    retype_password: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,13 +32,17 @@ export default function Register() {
     setSubmitting(true);
 
     try {
-      const res = await axios.post('https://api.antrein.com/bc/dashboard/auth/register', formData);
+      const res = await axios.post(
+        'https://api.antrein.com/bc/dashboard/auth/register',
+        formData
+      );
       if (res.status === 201) {
-        router.push('/login');  // Redirect to login page after successful registration
+        router.push('/login'); // Redirect to login page after successful registration
       }
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        setError((err as any)?.response?.data?.error || err.message);
+        toast.error((err as any)?.response?.data?.error || err.message);
       }
     } finally {
       setSubmitting(false);
@@ -48,69 +51,88 @@ export default function Register() {
 
   return (
     <>
-      <Alert variant="danger" show={error !== ''} onClose={() => setError('')} dismissible>{error}</Alert>
+      <Alert
+        variant='danger'
+        show={error !== ''}
+        onClose={() => setError('')}
+        dismissible
+      >
+        {error}
+      </Alert>
       <Form onSubmit={register}>
-        <InputGroup className="mb-3">
-          <InputGroupText><FontAwesomeIcon icon={faUser} fixedWidth /></InputGroupText>
+        <InputGroup className='mb-3'>
+          <InputGroupText>
+            <FontAwesomeIcon icon={faUser} fixedWidth />
+          </InputGroupText>
           <FormControl
-            name="name"
+            name='name'
             required
             disabled={submitting}
-            placeholder="Name"
-            aria-label="Name"
+            placeholder='Name'
+            aria-label='Name'
             value={formData.name}
             onChange={handleChange}
           />
         </InputGroup>
 
-        <InputGroup className="mb-3">
+        <InputGroup className='mb-3'>
           <InputGroupText>
             <FontAwesomeIcon icon={faEnvelope} fixedWidth />
           </InputGroupText>
           <FormControl
-            type="email"
-            name="email"
+            type='email'
+            name='email'
             required
             disabled={submitting}
-            placeholder="Email"
-            aria-label="Email"
+            placeholder='Email'
+            aria-label='Email'
             value={formData.email}
             onChange={handleChange}
           />
         </InputGroup>
 
-        <InputGroup className="mb-3">
-          <InputGroupText><FontAwesomeIcon icon={faLock} fixedWidth /></InputGroupText>
+        <InputGroup className='mb-3'>
+          <InputGroupText>
+            <FontAwesomeIcon icon={faLock} fixedWidth />
+          </InputGroupText>
           <FormControl
-            type="password"
-            name="password"
+            type='password'
+            name='password'
             required
             disabled={submitting}
-            placeholder="Password"
-            aria-label="Password"
+            placeholder='Password'
+            aria-label='Password'
             value={formData.password}
             onChange={handleChange}
           />
         </InputGroup>
 
-        <InputGroup className="mb-3">
-          <InputGroupText><FontAwesomeIcon icon={faLock} fixedWidth /></InputGroupText>
+        <InputGroup className='mb-3'>
+          <InputGroupText>
+            <FontAwesomeIcon icon={faLock} fixedWidth />
+          </InputGroupText>
           <FormControl
-            type="password"
-            name="retype_password"
+            type='password'
+            name='retype_password'
             required
             disabled={submitting}
-            placeholder="Repeat password"
-            aria-label="Repeat password"
+            placeholder='Repeat password'
+            aria-label='Repeat password'
             value={formData.retype_password}
             onChange={handleChange}
           />
         </InputGroup>
 
-        <Button type="submit" className="d-block w-100" disabled={submitting} variant="success">
+        <Button
+          type='submit'
+          className='d-block w-100'
+          disabled={submitting}
+          variant='success'
+        >
           Create Account
         </Button>
       </Form>
+      <Toaster />
     </>
   );
 }

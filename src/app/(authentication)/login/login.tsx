@@ -19,6 +19,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import InputGroupText from 'react-bootstrap/InputGroupText';
 import Cookies from 'js-cookie';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Login() {
   const router = useRouter();
@@ -53,7 +54,8 @@ export default function Login() {
       }
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        setError((err as any)?.response?.data?.error || err.message);
+        toast.error((err as any)?.response?.data?.error || err.message);
       }
     } finally {
       setSubmitting(false);
@@ -121,6 +123,7 @@ export default function Login() {
           </Col> */}
         </Row>
       </Form>
+      <Toaster />
     </>
   );
 }

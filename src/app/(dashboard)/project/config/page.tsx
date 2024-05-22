@@ -3,6 +3,7 @@ import { Col, Row, Form, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Page() {
   const selectedProject = Cookies.get('project');
@@ -160,13 +161,12 @@ export default function Page() {
         }
       );
 
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
-
       const data = await response.json();
-      console.log('Project updated successfully:', data);
-
+      if (response.ok) {
+        toast.success('Project updated successfully');
+      } else {
+        toast.error((data as any)?.error);
+      }
       // Optional: Navigate to another page or show a success message
       // router.push('/some-other-page');
     } catch (error) {
@@ -175,126 +175,129 @@ export default function Page() {
   };
 
   return (
-    <Row className='justify-content-md-center'>
-      <Col md={6}>
-        <h1>Project Configuration</h1>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'end',
-            alignItems: 'center',
-          }}
-        >
+    <>
+      <Row className='justify-content-md-center'>
+        <Col md={6}>
+          <h1>Project Configuration</h1>
           <div
             style={{
-              padding: '0.5rem',
-              border: '1px solid #ccc',
-              borderRadius: '0.25rem',
               display: 'flex',
+              justifyContent: 'end',
               alignItems: 'center',
             }}
           >
-            <span className='me-2'>Project Deployment:</span>
-            <span
+            <div
               style={{
-                display: 'inline-block',
-                width: '20px',
-                height: '20px',
-                borderRadius: '50%',
-                backgroundColor: health ? 'green' : 'red',
+                padding: '0.5rem',
+                border: '1px solid #ccc',
+                borderRadius: '0.25rem',
+                display: 'flex',
+                alignItems: 'center',
               }}
-            ></span>
+            >
+              <span className='me-2'>Project Deployment:</span>
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  backgroundColor: health ? 'green' : 'red',
+                }}
+              ></span>
+            </div>
           </div>
-        </div>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId='project_id'>
-            <Form.Label>Project ID</Form.Label>
-            <Form.Control
-              type='text'
-              name='project_id'
-              value={formData.project_id}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId='threshold'>
-            <Form.Label>Threshold</Form.Label>
-            <Form.Control
-              type='number'
-              name='threshold'
-              value={formData.threshold}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId='session_time'>
-            <Form.Label>Session Time</Form.Label>
-            <Form.Control
-              type='number'
-              name='session_time'
-              value={formData.session_time}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId='host'>
-            <Form.Label>Host</Form.Label>
-            <Form.Control
-              type='text'
-              name='host'
-              value={formData.host}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId='base_url'>
-            <Form.Label>Base URL</Form.Label>
-            <Form.Control
-              type='text'
-              name='base_url'
-              value={formData.base_url}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId='max_users_in_queue'>
-            <Form.Label>Max Users in Queue</Form.Label>
-            <Form.Control
-              type='number'
-              name='max_users_in_queue'
-              value={formData.max_users_in_queue}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId='queue_start'>
-            <Form.Label>Queue Start</Form.Label>
-            <Form.Control
-              type='datetime-local'
-              name='queue_start'
-              value={formData.queue_start}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId='queue_end'>
-            <Form.Label>Queue End</Form.Label>
-            <Form.Control
-              type='datetime-local'
-              name='queue_end'
-              value={formData.queue_end}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId='project_id'>
+              <Form.Label>Project ID</Form.Label>
+              <Form.Control
+                type='text'
+                name='project_id'
+                value={formData.project_id}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId='threshold'>
+              <Form.Label>Threshold</Form.Label>
+              <Form.Control
+                type='number'
+                name='threshold'
+                value={formData.threshold}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId='session_time'>
+              <Form.Label>Session Time</Form.Label>
+              <Form.Control
+                type='number'
+                name='session_time'
+                value={formData.session_time}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId='host'>
+              <Form.Label>Host</Form.Label>
+              <Form.Control
+                type='text'
+                name='host'
+                value={formData.host}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId='base_url'>
+              <Form.Label>Base URL</Form.Label>
+              <Form.Control
+                type='text'
+                name='base_url'
+                value={formData.base_url}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId='max_users_in_queue'>
+              <Form.Label>Max Users in Queue</Form.Label>
+              <Form.Control
+                type='number'
+                name='max_users_in_queue'
+                value={formData.max_users_in_queue}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId='queue_start'>
+              <Form.Label>Queue Start</Form.Label>
+              <Form.Control
+                type='datetime-local'
+                name='queue_start'
+                value={formData.queue_start}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId='queue_end'>
+              <Form.Label>Queue End</Form.Label>
+              <Form.Control
+                type='datetime-local'
+                name='queue_end'
+                value={formData.queue_end}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
-          <div className='flex justi'></div>
+            <div className='flex justi'></div>
 
-          <Button variant='primary' type='submit' className='mt-4'>
-            Submit
-          </Button>
-        </Form>
-      </Col>
-    </Row>
+            <Button variant='primary' type='submit' className='mt-4'>
+              Submit
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+      <Toaster />
+    </>
   );
 }

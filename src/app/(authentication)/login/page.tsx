@@ -22,7 +22,8 @@ export default function Page() {
             <div className='text-center'>
               <h2>Sign up</h2>
               <p>
-              Unlock seamless queue management with Antrein. Register now to protect your site from excessive load.
+                Unlock seamless queue management with Antrein. Register now to
+                protect your site from excessive load.
               </p>
               <Link
                 className='btn btn-lg btn-outline-light mt-3'
