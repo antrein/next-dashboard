@@ -17,6 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
+      <title>Antrein</title>
       <body>{children}</body>
     </html>
   );
