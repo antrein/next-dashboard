@@ -35,7 +35,9 @@ export default function middleware(request: NextRequest) {
     return redirectIfAuthenticated(request);
   }
 
-  if (['/', '/pokemons'].includes(request.nextUrl.pathname)) {
+  if (
+    ['/project/config', '/project/create'].includes(request.nextUrl.pathname)
+  ) {
     return authenticated(request);
   }
 
