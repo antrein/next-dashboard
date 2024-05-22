@@ -22,8 +22,7 @@ export default function Page() {
             <div className='text-center'>
               <h2>Sign up</h2>
               <p>
-                Welcome to Antrein, your ultimate solution for managing virtual
-                waiting rooms.
+              Unlock seamless queue management with Antrein. Register now to protect your site from excessive load.
               </p>
               <Link
                 className='btn btn-lg btn-outline-light mt-3'
