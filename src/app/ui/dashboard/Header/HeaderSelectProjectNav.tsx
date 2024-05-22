@@ -68,7 +68,6 @@ export default function HeaderSelectProjectNav() {
   // }, []);
 
   const handleShow = () => {
-    fetchProjects();
     setShowModal(true);
   };
 
@@ -85,6 +84,10 @@ export default function HeaderSelectProjectNav() {
     setShowModal(false);
     router.refresh();
   };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
 
   return (
     <>
