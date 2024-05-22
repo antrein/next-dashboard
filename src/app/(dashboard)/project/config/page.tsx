@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 
 export default function Page() {
   const selectedProject = Cookies.get('project');
+  const [health, setHealth] = useState(false);
   const [formData, setFormData] = useState({
     project_id: '',
     threshold: 0,
@@ -16,6 +17,43 @@ export default function Page() {
     queue_start: '',
     queue_end: '',
   });
+
+  const checkProjectHealth = async () => {
+    try {
+      const auth = Cookies.get('auth');
+      if (!auth) {
+        console.error('No authorization token found');
+        return;
+      }
+      const authParsed = JSON.parse(auth);
+      const { token } = authParsed;
+
+      const response = await fetch(
+        `https://api.antrein.com/bc/dashboard/project/health/${selectedProject}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const jsonData = await response.json();
+
+      if (jsonData.data && jsonData.data.healthiness) {
+        setHealth(true);
+      } else {
+        setHealth(false);
+      }
+    } catch (error) {
+      console.error('Error fetching project health:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchProjectDetails = async () => {
@@ -66,6 +104,12 @@ export default function Page() {
 
     if (selectedProject) {
       fetchProjectDetails();
+
+      const interval = setInterval(() => {
+        checkProjectHealth();
+      }, 2000);
+
+      return () => clearInterval(interval);
     }
   }, [selectedProject]);
 
@@ -134,6 +178,34 @@ export default function Page() {
     <Row className='justify-content-md-center'>
       <Col md={6}>
         <h1>Project Configuration</h1>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'end',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              padding: '0.5rem',
+              border: '1px solid #ccc',
+              borderRadius: '0.25rem',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <span className='me-2'>Project Deployment:</span>
+            <span
+              style={{
+                display: 'inline-block',
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: health ? 'green' : 'red',
+              }}
+            ></span>
+          </div>
+        </div>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId='project_id'>
             <Form.Label>Project ID</Form.Label>
@@ -215,6 +287,8 @@ export default function Page() {
               required
             />
           </Form.Group>
+
+          <div className='flex justi'></div>
 
           <Button variant='primary' type='submit' className='mt-4'>
             Submit

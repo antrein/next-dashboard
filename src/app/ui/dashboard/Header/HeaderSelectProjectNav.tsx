@@ -50,7 +50,15 @@ export default function HeaderSelectProjectNav() {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      setProjects(data.data.projects); // Assuming the API response structure
+      setProjects(data.data.projects);
+      if (selectedProjectId) {
+        const selectedProject = data?.data?.projects?.find(
+          (p: any) => p.id === selectedProjectId
+        );
+        if (selectedProject) {
+          setSelectedProjectName(selectedProject.name);
+        }
+      }
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
