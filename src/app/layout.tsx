@@ -17,6 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
+      <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any" />
       <title>Antrein</title>
       <body>{children}</body>
     </html>

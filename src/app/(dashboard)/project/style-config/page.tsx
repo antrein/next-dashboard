@@ -13,7 +13,7 @@ export default function Page() {
     queue_page_base_color: "",
     queue_page_title: "",
     image: null,
-    file: null
+    file: null,
   });
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function Page() {
             queue_page_base_color: data.configuration.queue_page_base_color,
             queue_page_title: data.configuration.queue_page_title,
             image: null,
-            file: null
+            file: null,
           });
         }
       } catch (error) {
@@ -66,7 +66,9 @@ export default function Page() {
     }
   }, [selectedProject]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, files } = e.target;
     setFormData({ ...formData, [name]: files ? files[0] : value });
   };
@@ -90,7 +92,10 @@ export default function Page() {
         formDataToSend.append("file", formData.file);
       } else {
         formDataToSend.append("queue_page_style", formData.queue_page_style);
-        formDataToSend.append("queue_page_base_color", formData.queue_page_base_color);
+        formDataToSend.append(
+          "queue_page_base_color",
+          formData.queue_page_base_color
+        );
         formDataToSend.append("queue_page_title", formData.queue_page_title);
       }
 
