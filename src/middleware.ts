@@ -36,7 +36,7 @@ export default function middleware(request: NextRequest) {
   }
 
   if (
-    ['/project/config', '/project/create'].includes(request.nextUrl.pathname)
+    ['/project/config', '/project/create, /project/style-config, /'].includes(request.nextUrl.pathname)
   ) {
     return authenticated(request);
   }
