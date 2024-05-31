@@ -145,6 +145,15 @@ export default function Page() {
                 readOnly
               />
             </Form.Group>
+            <Form.Group controlId="queue_page_title">
+              <Form.Label>Queue Page Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="queue_page_title"
+                value={formData.queue_page_title}
+                onChange={handleChange}
+              />
+            </Form.Group>
             <Form.Group controlId="image">
               <Form.Label>Image</Form.Label>
               <Form.Control
@@ -183,15 +192,6 @@ export default function Page() {
                     type="color"
                     name="queue_page_base_color"
                     value={formData.queue_page_base_color}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-                <Form.Group controlId="queue_page_title">
-                  <Form.Label>Queue Page Title</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="queue_page_title"
-                    value={formData.queue_page_title}
                     onChange={handleChange}
                   />
                 </Form.Group>
