@@ -216,6 +216,7 @@ export default function Page() {
                 value={formData.project_id}
                 onChange={handleChange}
                 required
+                readOnly
               />
             </Form.Group>
             <Form.Group controlId='threshold'>

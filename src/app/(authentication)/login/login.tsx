@@ -14,9 +14,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { deleteCookie, getCookie } from 'cookies-next';
 import axios from 'axios';
-import Link from 'next/link';
 import InputGroupText from 'react-bootstrap/InputGroupText';
 import Cookies from 'js-cookie';
 import toast, { Toaster } from 'react-hot-toast';
@@ -116,11 +114,6 @@ export default function Login() {
               Login
             </Button>
           </Col>
-          {/* <Col xs={6} className="text-end">
-            <Link className="px-0" href="#">
-              Forgot password?
-            </Link>
-          </Col> */}
         </Row>
       </Form>
       <Toaster />
