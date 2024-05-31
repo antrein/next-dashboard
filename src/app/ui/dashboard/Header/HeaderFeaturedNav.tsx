@@ -8,7 +8,7 @@ export default function HeaderFeaturedNav() {
     <Nav>
       <NavItem>
         <Link href='/' passHref legacyBehavior>
-          <NavLink className='p-2'>Antrein</NavLink>
+          <NavLink className='p-2'>Home</NavLink>
         </Link>
       </NavItem>
       {/* <NavItem>

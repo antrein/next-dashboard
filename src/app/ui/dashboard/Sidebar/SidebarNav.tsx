@@ -26,7 +26,7 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faCode} href='/project/config'>
         Configuration
       </SidebarNavItem>
-      <SidebarNavItem icon={faPaintBrush} href='/project/config'>
+      <SidebarNavItem icon={faPaintBrush} href='/project/style-config'>
         Style
       </SidebarNavItem>
     </ul>

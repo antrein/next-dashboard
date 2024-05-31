@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Button } from 'react-bootstrap';
 import { SidebarContext } from '@/app/ui/dashboard/sidebar-provider';
+import Image from 'next/image';
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const [isNarrow, setIsNarrow] = useState(false);
@@ -45,7 +46,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
       id='sidebar'
     >
       <div className='sidebar-brand d-none d-md-flex align-items-center justify-content-center'>
-        Antrein
+        <Image src="/assets/brand/antrein-logo.svg" alt="logo" width={100} height={60} />
       </div>
 
       <div className='sidebar-nav flex-fill'>{children}</div>
