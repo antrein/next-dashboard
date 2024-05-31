@@ -1,7 +1,7 @@
 "use client";
-import { Col, Row, Form, Button } from "react-bootstrap";
+import { Col, Row, Form, Button, FormControl } from "react-bootstrap";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEventHandler } from "react";
 import Cookies from "js-cookie";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -67,10 +67,17 @@ export default function Page() {
   }, [selectedProject]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: any
   ) => {
-    const { name, value, files } = e.target;
-    setFormData({ ...formData, [name]: files ? files[0] : value });
+    const { name, value } = e.target;
+  
+    // Type guard to check if the target is an HTMLInputElement and has a files property
+    if (e.target instanceof HTMLInputElement && e.target.type === 'file') {
+      const files = e.target.files;
+      setFormData({ ...formData, [name]: files ? files[0] : null });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
